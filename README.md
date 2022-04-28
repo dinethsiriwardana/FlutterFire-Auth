@@ -1,7 +1,7 @@
 <h1>Welcome</h1>
 <h2>SignIn and Register with Flutter & Firebase</h2>
 
-<p style=""> ⚠️⚠️ there is no <i> google-services.json </i>file attached in this project because of security issues, you need to attach it with your own firebase project ⚠️⚠️</p> 
+<p style=""> ⚠️ there is no <i> google-services.json </i>file attached in this project because of security issues, you need to attach it with your own firebase project ⚠️</p> 
 
 <br>
 you need the below dependencies for this project and <i>you can use latest packages using links below</i>
