@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../servises/auth.dart';
-import '../signin/register.dart';
+import 'login.dart';
+import 'servises/auth.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class UserRegister extends StatefulWidget {
+  const UserRegister({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<UserRegister> createState() => _UserRegisterState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _UserRegisterState extends State<UserRegister> {
+  // TextEditingController for controll and get data from TextInput Field
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  // FocusNode for controll focus and transfer focus between TextInput Field
+
   final FocusNode _emailFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
 
+  //Assign TextEditingControllers text to variable
   String get _email => _emailController.text;
   String get _password => _passwordController.text;
 
@@ -24,9 +29,14 @@ class _LoginPageState extends State<LoginPage> {
 
   void _submit() async {
     try {
+      //connect Class Auth from app/servises/auth.dart using provider create in main.dart
       final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signInWithEmailAndPassword(_email, _password);
-      Navigator.of(context).pop();
+
+      // send email and password to createUserWithEmailandPassword in auth.dart for register
+      await auth.createUserWithEmailandPassword(_email, _password);
+
+      Navigator.of(context).pop(); //pop for go back
+
     } catch (e) {
       print(e.toString());
     }
@@ -35,10 +45,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
+      body: Form(
+        key: _formKey,
+        child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const SizedBox(
                 height: 50.0,
@@ -55,20 +66,33 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 50.0,
                     ),
-                    ElevatedButton(
-                      onPressed: _submit,
-                      child: Text("login"),
+                    SizedBox(
+                      height: 50.0,
+                      width: 320.0,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.blue,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                              Radius.circular(50.0),
+                            ))),
+                        onPressed: _submit,
+                        child: Text(
+                          'Register',
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                      ),
                     ),
                     TextButton(
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (_) {
-                              return UserRegister();
+                              return UserLogin();
                             },
                           ));
                         },
                         child: Text(
-                          "No account ? Register",
+                          "Have account ? Login",
                           style: TextStyle(color: Colors.black),
                         ))
                   ],
@@ -87,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
       height: 55.0,
       child: TextField(
         controller: _passwordController,
+        focusNode: _passwordFocusNode,
         decoration: const InputDecoration(
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(

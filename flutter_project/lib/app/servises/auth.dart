@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 abstract class AuthBase {
   Stream<User?> authStateChanges();
   Future<void> signOut();
+  Future<void> deleteacc();
   Future<User?> signInWithEmailAndPassword(String email, String password);
   Future<User?> createUserWithEmailandPassword(String email, String password);
 }
@@ -17,9 +18,11 @@ class Auth implements AuthBase {
   Stream<User?> authStateChanges() => _firebaseAuth.authStateChanges();
 
   @override
+  // currentUser = FirebaseAuth.instance.currentUser;
   User? get currentUser => _firebaseAuth.currentUser;
 
   @override
+  // SignIn using Email
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
     final userCredential =
@@ -30,6 +33,7 @@ class Auth implements AuthBase {
     return userCredential.user;
   }
 
+  @override
   Future<User?> createUserWithEmailandPassword(
       String email, String password) async {
     final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -40,5 +44,10 @@ class Auth implements AuthBase {
   @override
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+  }
+
+  @override
+  Future<void> deleteacc() async {
+    await currentUser!.delete();
   }
 }
