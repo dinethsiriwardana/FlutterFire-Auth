@@ -33,7 +33,10 @@ class _UserLoginState extends State<UserLogin> {
 
       // send email and password to signInWithEmailAndPassword in auth.dart for login
       await auth.signInWithEmailAndPassword(_email, _password);
-      Navigator.of(context).pop(); //pop for go back
+       Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
     } catch (e) {
       print(e.toString());
     }
